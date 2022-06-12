@@ -5,7 +5,7 @@ const Song = require('./database/songs')
 
 
 router.get('/', (req,res)=>{
-    res.send("Hello world")
+    
 })
 
 
