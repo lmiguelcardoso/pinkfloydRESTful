@@ -10,6 +10,10 @@ const Song = database.define('songs',{
     duration:{
         type: Sequelize.STRING,
         allowNull: false
+    },
+    yt_url:{
+        type: Sequelize.STRING,
+        allowNull: false
     }
 })
 

@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h3>Criação de Album</h3>
+    <hr>
+        <input type="text" name="" id="titleAlbum" placeholder="Titulo">
+        <input type="number" name="" placeholder="Ano de Lançamento" id="ageAlbum">
+        <input type="text" name="" id="durationAlbum" placeholder="Duração">
+        <input type="text" name="" id="labelAlbum" placeholder="Gravação">
+        <button onclick="createAlbum()">Enviar Album</button>
+     <hr>
+     <h3>Criação de Musica</h3>
+     <input type="text" name="" id="titleSong" placeholder="Titulo">
+     <input type="text" name="" id="durationSong" placeholder="Duração">
+     <input type="text" name="" id="ytlink" placeholder="Link Youtube">
+     <select name="" id="selectAlbum">
+     </select>
+     <button onclick="createSong()">Enviar Album</button>
+     <hr>
+
+    <ul id="listAlbum"></ul> 
+
+</body>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script>
+    function createAlbum(){
+        let title = document.getElementById("titleAlbum").value;
+        let age = document.getElementById("ageAlbum").value
+        let duration = document.getElementById("durationAlbum").value
+        let label = document.getElementById("labelAlbum").value
+        
+        let submit = {
+            title:title,
+            releaseYear: age,
+            duration: duration,
+            label: label
+        }
+
+        axios.post("http://localhost:3000/albums", submit).then()
+
+    }
+
+    function createSong(){
+        let title = document.getElementById("titleSong").value;
+        let duration = document.getElementById("durationSong").value
+        let ytlink = document.getElementById("ytlink").value
+        let selectalbum = document.getElementById("selectAlbum").value
+        
+        let newsong = {
+            title:title,
+            duration: duration,
+            yt_url: ytlink,
+            albumId: selectalbum
+        }
+
+       axios.post("http://localhost:3000/songs",newsong).then()
+    }
+
+    axios.get("http://localhost:3000/albums").then(album=>{
+            // LISTAR ALBUMS NO INDEX
+            let data = album.data
+            let list = document.getElementById("listAlbum");
+            console.log(data)
+            data.forEach(album=>{
+                let item = document.createElement("li")
+                item.innerHTML = album.title
+                list.appendChild(item)
+            
+            let listsongs = document.createElement("ol")  
+
+            axios.get("http://localhost:3000/songs").then(song=>{
+                let data = song.data
+                data.forEach(song=>{
+                let songLI = document.createElement("li")
+                songLI.innerHTML =  song.title
+                let songDescription = document.createElement("ul")  
+                let duration = document.createElement("li")
+                duration.innerHTML = song.duration
+                let yturl = document.createElement("li")
+                yturl.innerHTML = song.yt_url
+                    
+                songDescription.appendChild(duration)
+                songDescription.appendChild(yturl)
+                    
+                songLI.appendChild(songDescription)
+                listsongs.appendChild(songLI)
+                })
+                item.appendChild(listsongs)
+            })
+            //LISTAR NOME DO ALBUM NO SELECT
+            let select = document.getElementById("selectAlbum")
+            let opt = document.createElement("option")
+            opt.innerHTML = album.title
+            opt.value = album.id
+            select.appendChild(opt)
+            })
+           
+
+           
+
+        })
+</script>
+</html>

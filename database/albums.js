@@ -21,5 +21,4 @@ const Album = database.define('albums',{
     }
 })
 
-
 module.exports = Album
